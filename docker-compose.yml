@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./healthcare_agent.db
+      - JWT_SECRET=super-secret-healthcare-secure-key-2026-mlops-agent
+    volumes:
+      - ./backend:/workspace/backend
+      - ./healthcare_rag_project/data:/workspace/healthcare_rag_project/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/workspace
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./mlops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - ./mlops/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./mlops/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./mlops/grafana/dashboards:/etc/grafana/dashboards:ro

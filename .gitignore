@@ -1,0 +1,36 @@
+# Python
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.pkl
+mlflow_runs/
+
+# Node
+node_modules/
+dist/
+.eslintcache
+
+# Databases & Vector Stores
+*.db
+*.sqlite
+faiss_index.bin
+
+# IDE & Editor files
+.vscode/
+.idea/
+.gemini/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Sensitive/Credential testing scripts
+test_groq.py
+.env
+
